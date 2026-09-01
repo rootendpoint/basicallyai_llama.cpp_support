@@ -63,6 +63,8 @@ python numpy_reference.py --model-dir Pebble-10M --prompt "The capital of France
   token sequences against the numpy reference across multiple prompts (the only
   divergences are genuine argmax ties), quantized KV cache included.
 - Pebble-10M is a 10M-parameter research model: expect toy-level output quality.
+- Known approximation: the HF implementation's Mamba2 mixer RMS norm uses eps 1e-5
+  while the GGUF carries one eps (1e-6) shared by all norms - a ~1e-5 relative effect.
 
 ## License
 
