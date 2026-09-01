@@ -10,11 +10,21 @@ and [ContextReq/Pebble-10M-Chat-GGUF](https://huggingface.co/ContextReq/Pebble-1
 Upstream llama.cpp refuses GGUFs with `general.architecture = "pebble"`, so a
 patched build is required. This repo provides everything to reproduce it.
 
+## Version
+
+The patch was built and verified against upstream llama.cpp at commit
+[`0eadefe`](https://github.com/ggml-org/llama.cpp/commit/0eadefebd3f8f92a86d634a0e5b8fffc9dc792c0)
+(full SHA `0eadefebd3f8f92a86d634a0e5b8fffc9dc792c0`, 2026-09-01, "qwen4exp: support
+recurrent state rollback (#28123)"), which descends from release
+[`b10731`](https://github.com/ggml-org/llama.cpp/releases/tag/b10731).
+llama.cpp moves fast: the patch does **not** apply to newer commits, so check
+out `0eadefe` before applying (the build commands below do this).
+
 ## Contents
 
 | File | Purpose |
 |------|---------|
-| `llama.cpp-pebble.patch` | Adds the `pebble` architecture (LLM_ARCH_PEBBLE) to llama.cpp. Applies cleanly against upstream commit `0eadefe`. |
+| `llama.cpp-pebble.patch` | Adds the `pebble` architecture (LLM_ARCH_PEBBLE) to llama.cpp. Built against upstream llama.cpp `0eadefe` (see Version above). |
 | `basicallyai_to_gguf.py` | Standalone HF -> GGUF converter (numpy + safetensors only, no torch). |
 | `numpy_reference.py` | Independent pure-numpy reimplementation of the Pebble forward pass, used to verify the runtime token-by-token. |
 | `REQUIREMENTS.txt` | Python deps for the converter and reference. |
