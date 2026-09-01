@@ -1,0 +1,5 @@
+# Pebble HF -> GGUF converter deps (Python 3.12)
+# no torch needed: safetensors.numpy loads weights; gguf-py comes from the llama.cpp clone
+numpy>=1.26
+safetensors>=0.4
+pyyaml>=6.0
