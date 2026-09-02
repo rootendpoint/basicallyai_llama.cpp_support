@@ -58,8 +58,8 @@ llama-quantize pebble-10m-f16.gguf pebble-10m-f16-q8_0.gguf q8_0
 ```
 
 The converter embeds the chat template for the Chat model (lowercase
-`user:` / `assistant:` labels - the best match found for the undisclosed SFT
-format, determined by A/B testing).
+`user:` / `assistant:` labels). This format was reverse-engineered by A/B
+testing and later confirmed by the basically-ai team as the exact SFT format.
 
 ## Verify
 
