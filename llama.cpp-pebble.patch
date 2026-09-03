@@ -75,6 +75,28 @@ index ca7d55a..ad9b356 100644
      LLM_ARCH_UNKNOWN,
  };
  
+diff --git a/src/llama-context.cpp b/src/llama-context.cpp
+index a920c42..9925b1e 100644
+--- a/src/llama-context.cpp
++++ b/src/llama-context.cpp
+@@ -552,8 +552,15 @@ void llama_context::resolve_fused_ops(const llama_memory_context_i * mctx, uint3
+     };
+ 
+     if (cparams.auto_fa) {
+-        resolve(llm_fused_op_flash_attn_probe, cparams.flash_attn);
+-        cparams.auto_fa = false;
++        if (model.arch == LLM_ARCH_PEBBLE) {
++            // head_dim 76 (608/8) is unsupported by the CUDA FA kernels; fallback is correct
++            cparams.flash_attn = false;
++            cparams.auto_fa = false;
++            LLAMA_LOG_INFO("%s: pebble: FA unsupported for head_dim 76, disabled\n", func);
++        } else {
++            resolve(llm_fused_op_flash_attn_probe, cparams.flash_attn);
++            cparams.auto_fa = false;
++        }
+     }
+ 
+     if (cparams.auto_fgdn) {
 diff --git a/src/llama-model.cpp b/src/llama-model.cpp
 index e679b24..6b3c80b 100644
 --- a/src/llama-model.cpp
@@ -96,6 +118,18 @@ index e679b24..6b3c80b 100644
              return LLAMA_ROPE_TYPE_NEOX;
  
          case LLM_ARCH_DFLASH:
+diff --git a/src/llama-vocab.cpp b/src/llama-vocab.cpp
+index ff926ce..a2c2f23 100644
+--- a/src/llama-vocab.cpp
++++ b/src/llama-vocab.cpp
+@@ -2864,6 +2864,7 @@ void llama_vocab::impl::load(llama_model_loader & ml, const LLM_KV & kv) {
+                     || t.first == "<|end_of_text|>"
+                     || t.first == "<end_of_utterance>" // smoldocling
+                     || t.first == "<eos>"            // gemma4
++                    || t.first == "<|eos|>"          // pebble (basically-ai)
+                     || t.first == "<turn|>"          // gemma4
+                     || t.first == "<|tool_response>" // gemma4
+                     || t.first == "<｜end▁of▁sentence｜>" // deepseek-ocr
 diff --git a/src/models/models.h b/src/models/models.h
 index 9b87a40..6417445 100644
 --- a/src/models/models.h

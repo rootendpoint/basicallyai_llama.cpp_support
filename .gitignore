@@ -1,3 +1,14 @@
 .venv/
 __pycache__/
 *.gguf
+# python env + converter outputs
+.venv/
+__pycache__/
+*.gguf
+
+# artifacts (not part of the support repo)
+*.gguf
+.venv/
+__pycache__/
+Pebble-*/
+*-orig/

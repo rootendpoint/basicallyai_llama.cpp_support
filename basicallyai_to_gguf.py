@@ -35,7 +35,8 @@ DEFAULT_CHAT_TEMPLATE = (
     "{% if message['role'] == 'user' %}user: "
     "{% elif message['role'] == 'assistant' %}assistant: "
     "{% else %}{{ message['role'] }}: {% endif %}"
-    "{% for part in message['content'] %}{{ part['text'] }}{% endfor %}\n"
+    "{% if message['content'] is string %}{{ message['content'] }}"
+    "{% else %}{% for part in message['content'] %}{{ part['text'] }}{% endfor %}{% endif %}\n"
     "{% endfor %}"
     "{% if add_generation_prompt %}assistant: {% endif %}"
 )
