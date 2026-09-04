@@ -79,3 +79,14 @@ python numpy_reference.py --model-dir Pebble-10M --prompt "The capital of France
 ## License
 
 Apache 2.0 (matching the original models).
+
+## CPU support (no GPU required)
+
+Pure-CPU support for the Pebble models (no mamba-ssm, no CUDA) lives in the
+sister repository **basicallyai_cpu_support**:
+
+https://github.com/rootendpoint/basicallyai_cpu_support
+
+It runs the original HF checkpoints in pure PyTorch on plain CPU (~118 tok/s
+for 10M, ~65 tok/s for 25M on a Ryzen 5 2600X), verified token-identical
+against this repo's GGUF pipeline and the numpy oracle.
